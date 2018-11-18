@@ -1,4 +1,4 @@
-package yiyo.com.vehiclestest
+package yiyo.com.taxiapp
 
 import org.junit.Test
 

@@ -1,9 +1,9 @@
-package yiyo.com.vehiclestest.api
+package yiyo.com.taxiapp.api
 
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
-import yiyo.com.vehiclestest.models.VehiclesResponse
+import yiyo.com.taxiapp.models.VehiclesResponse
 
 interface MyTaxiApi {
 

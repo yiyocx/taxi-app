@@ -1,4 +1,4 @@
-package yiyo.com.vehiclestest.api
+package yiyo.com.taxiapp.api
 
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

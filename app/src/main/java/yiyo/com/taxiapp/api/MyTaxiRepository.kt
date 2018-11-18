@@ -1,4 +1,4 @@
-package yiyo.com.vehiclestest.api
+package yiyo.com.taxiapp.api
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

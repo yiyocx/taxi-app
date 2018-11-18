@@ -1,8 +1,8 @@
-package yiyo.com.vehiclestest
+package yiyo.com.taxiapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import yiyo.com.vehiclestest.api.MyTaxiRepository
+import yiyo.com.taxiapp.api.MyTaxiRepository
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package yiyo.com.vehiclestest
+package yiyo.com.taxiapp
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

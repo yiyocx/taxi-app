@@ -1,4 +1,4 @@
-package yiyo.com.vehiclestest.models
+package yiyo.com.taxiapp.models
 
 data class Vehicle(
     val id: Int,
