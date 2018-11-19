@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.uiSettings.isMapToolbarEnabled = false
 
         // Move the camera to Hamburg, Germany
         val bounds = LatLngBounds.Builder()
@@ -86,9 +87,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showData(vehiclesMap: Map<String, List<VehicleItem>>) {
-        adapter.clear()
-        map.clear()
-
         val taxiVehicles = vehiclesMap[TAXI]
         taxiVehicles?.let { taxis ->
             val header = ExpandableHeaderItem(TAXI, taxis.size)
