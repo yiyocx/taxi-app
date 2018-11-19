@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,22 +11,23 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_margin="8dp"
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp">
-
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/imageViewLogo"
-                app:layout_constraintDimensionRatio="H,1:1"
+                app:layout_constraintDimensionRatio="H,"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/textViewSeats"
                 android:layout_marginEnd="8dp"
@@ -32,14 +35,15 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/taxi"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"/>
+                app:layout_constraintHorizontal_bias="0.5"
+                android:adjustViewBounds="true"
+                tools:src="@drawable/taxi"/>
 
             <TextView
-                android:text="Taxi"
-                android:layout_width="wrap_content"
+                android:text="@{ vehicle.label() }"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewName"
                 android:layout_marginTop="8dp"
@@ -50,10 +54,12 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintBottom_toTopOf="@+id/textViewSeats"
-                android:textSize="18sp"/>
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Taxi"/>
 
             <TextView
-                android:text="4 seats"
+                android:text="@{ vehicle.seats() }"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewSeats"
@@ -65,7 +71,8 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintBottom_toTopOf="@+id/imageViewLogo"
-                android:textSize="12sp"/>
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                tools:text="4 seats"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

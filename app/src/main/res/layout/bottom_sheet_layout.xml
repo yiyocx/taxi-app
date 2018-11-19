@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:behavior_peekHeight="56dp"
         android:elevation="16dp"
         android:clickable="true"
         android:focusable="true"
+        app:behavior_peekHeight="56dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <TextView
@@ -20,7 +19,7 @@
             android:drawableTop="@drawable/ic_location"
             android:drawablePadding="0dp"
             android:padding="4dp"
-            android:text="Explore"
+            android:text="@string/explore"
             android:textColor="@color/blue_marker"
             android:textAlignment="center"
             android:gravity="center_vertical"
@@ -30,7 +29,6 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
             android:clipChildren="false"/>
 
     </LinearLayout>
