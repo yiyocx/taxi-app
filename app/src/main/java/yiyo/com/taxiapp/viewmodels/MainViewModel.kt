@@ -18,10 +18,11 @@ import yiyo.com.taxiapp.models.Vehicle.Companion.TAXI
 class MainViewModel : ViewModel(), OnItemClickListener {
 
     private val repository by lazy { VehiclesRepository() }
-    private val groupedVehicles by lazy { MutableLiveData<Map<String, List<VehicleItem>>>() }
-    private val taxiVehicles by lazy { MutableLiveData<List<VehicleItem>>() }
-    private val poolingVehicles by lazy { MutableLiveData<List<VehicleItem>>() }
     private val compositeDisposable by lazy { CompositeDisposable() }
+
+    private val vehicles by lazy { HashMap<String, List<VehicleItem>>() }
+    private val groupedVehicles by lazy { MutableLiveData<Map<String, List<VehicleItem>>>() }
+    private val vehicleUpdates by lazy { MutableLiveData<Triple<VehicleItem, List<VehicleItem>, List<VehicleItem>>>() }
 
     fun loadData() {
         compositeDisposable += repository.getVehicles()
@@ -29,28 +30,24 @@ class MainViewModel : ViewModel(), OnItemClickListener {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
+                vehicles.clear()
+                vehicles.putAll(data)
                 groupedVehicles.value = data
-                taxiVehicles.value = data[TAXI]
-                poolingVehicles.value = data[POOLING]
             }
     }
 
-    fun groupedVehicles(): LiveData<Map<String, List<VehicleItem>>> = groupedVehicles
+    fun initialData(): LiveData<Map<String, List<VehicleItem>>> = groupedVehicles
 
-    fun taxiVehicles(): LiveData<List<VehicleItem>> = taxiVehicles
-
-    fun poolingVehicles(): LiveData<List<VehicleItem>> = poolingVehicles
+    fun vehicleUpdates(): MutableLiveData<Triple<VehicleItem, List<VehicleItem>, List<VehicleItem>>> = vehicleUpdates
 
     override fun onItemClick(item: Item<*>, view: View) {
         if (item is VehicleItem) {
-            taxiVehicles.value?.let {
-                val newList = it.map { vehicle -> vehicle.copy(isSelected = (vehicle == item) && !item.isSelected) }
-                taxiVehicles.value = newList
-            }
-            poolingVehicles.value?.let {
-                val newList = it.map { vehicle -> vehicle.copy(isSelected = (vehicle == item) && !item.isSelected) }
-                poolingVehicles.value = newList
-            }
+            val toggledItem = item.copy(isSelected = !item.isSelected)
+            val taxis =
+                vehicles[TAXI]?.map { vehicle -> vehicle.copy(isSelected = (vehicle == item) && toggledItem.isSelected) }
+            val pooling =
+                vehicles[POOLING]?.map { vehicle -> vehicle.copy(isSelected = (vehicle == item) && toggledItem.isSelected) }
+            vehicleUpdates.value = Triple(toggledItem, taxis.orEmpty(), pooling.orEmpty())
         }
     }
 }
