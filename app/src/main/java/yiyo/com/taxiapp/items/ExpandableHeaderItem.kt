@@ -26,6 +26,6 @@ class ExpandableHeaderItem(private val title: String, private val size: Int) :
     }
 
     private fun getToggleIcon(): Int {
-        return if (expandableGroup.isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
+        return if (expandableGroup.isExpanded) R.drawable.ic_round_expand_less else R.drawable.ic_round_expand_more
     }
 }
