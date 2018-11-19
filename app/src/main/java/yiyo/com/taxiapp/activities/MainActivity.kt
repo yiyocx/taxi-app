@@ -38,19 +38,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val markerIcon by lazy { BitmapDescriptorFactory.fromResource(R.drawable.taxi_marker) }
 
     private val binding by lazy { DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main) }
+    private lateinit var viewModel: MainViewModel
     private val adapter = GroupAdapter<ViewHolder>().apply { spanCount = SPANS }
+    private val taxiSection by lazy { Section() }
+    private val poolingSection by lazy { Section() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding.viewModel = viewModel
 
         initRecyclerView()
+        subscribeToChanges()
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+    }
 
+    private fun subscribeToChanges() {
         viewModel.groupedVehicles().observe(this, Observer { vehicles -> showData(vehicles) })
+        viewModel.taxiVehicles().observe(this, Observer { taxis -> taxiSection.update(taxis) })
+        viewModel.poolingVehicles().observe(this, Observer { pooling -> poolingSection.update(pooling) })
     }
 
     private fun initRecyclerView() {
@@ -61,6 +69,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             this.layoutManager = layoutManager
             adapter = this@MainActivity.adapter
         }
+        adapter.setOnItemClickListener(viewModel)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -73,7 +82,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .build()
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, mapPadding))
 
-        binding.viewModel?.loadData()
+        viewModel.loadData()
     }
 
     private fun showData(vehiclesMap: Map<String, List<VehicleItem>>) {
@@ -84,7 +93,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         taxiVehicles?.let { taxis ->
             val header = ExpandableHeaderItem(TAXI, taxis.size)
             val expandableGroup = ExpandableGroup(header, true)
-            expandableGroup.add(Section(taxis))
+            expandableGroup.add(taxiSection)
             adapter.add(expandableGroup)
         }
 
@@ -92,7 +101,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         poolingVehicles?.let { pool ->
             val header = ExpandableHeaderItem(POOLING, pool.size)
             val expandableGroup = ExpandableGroup(header, true)
-            expandableGroup.add(Section(pool))
+            expandableGroup.add(poolingSection)
             adapter.add(expandableGroup)
         }
 

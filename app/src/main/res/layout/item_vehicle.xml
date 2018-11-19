@@ -8,6 +8,10 @@
         <variable
             name="vehicle"
             type="yiyo.com.taxiapp.models.Vehicle"/>
+
+        <variable
+            name="isSelected"
+            type="Boolean"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -17,9 +21,11 @@
         app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:foreground="?android:attr/selectableItemBackground"
+            android:background="@{ isSelected ? @color/colorAccent : @color/white }"
             android:clickable="true"
             android:focusable="true">
 

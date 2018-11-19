@@ -1,19 +1,40 @@
 package yiyo.com.taxiapp.items
 
+import com.xwray.groupie.Item
+import com.xwray.groupie.OnItemClickListener
+import com.xwray.groupie.OnItemLongClickListener
 import com.xwray.groupie.databinding.BindableItem
+import com.xwray.groupie.databinding.ViewHolder
 import yiyo.com.taxiapp.R
 import yiyo.com.taxiapp.databinding.ItemVehicleBinding
 import yiyo.com.taxiapp.models.Vehicle
 import yiyo.com.taxiapp.models.Vehicle.Companion.TAXI
 
-class VehicleItem(val vehicle: Vehicle) : BindableItem<ItemVehicleBinding>() {
+data class VehicleItem(val vehicle: Vehicle, val isSelected: Boolean = false) : BindableItem<ItemVehicleBinding>() {
 
     override fun bind(viewBinding: ItemVehicleBinding, position: Int) {
         viewBinding.vehicle = vehicle
-        if (vehicle.fleetType == TAXI) {
-            viewBinding.imageViewLogo.setImageResource(R.drawable.taxi)
-        } else {
-            viewBinding.imageViewLogo.setImageResource(R.drawable.pooling)
+        viewBinding.isSelected = isSelected
+
+        viewBinding.imageViewLogo.setImageResource(
+            R.drawable.taxi.takeIf { vehicle.fleetType == TAXI } ?: R.drawable.pooling)
+    }
+
+    override fun bind(
+        holder: ViewHolder<ItemVehicleBinding>,
+        position: Int,
+        payloads: MutableList<Any>,
+        onItemClickListener: OnItemClickListener?,
+        onItemLongClickListener: OnItemLongClickListener?
+    ) {
+        super.bind(holder, position, payloads, onItemClickListener, onItemLongClickListener)
+        holder.binding.container.setOnClickListener { onItemClickListener?.onItemClick(this, holder.itemView) }
+    }
+
+    override fun isSameAs(other: Item<*>): Boolean {
+        return when (other) {
+            is VehicleItem -> vehicle.heading == other.vehicle.heading
+            else -> false
         }
     }
 
