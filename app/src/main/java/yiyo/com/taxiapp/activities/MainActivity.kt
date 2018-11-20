@@ -45,6 +45,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val taxiSection by lazy { Section() }
     private val poolingSection by lazy { Section() }
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from(binding.bottomSheet.container) }
+    private val hamburgBounds by lazy {
+        LatLngBounds.Builder().include(HAMBURG_1)
+                .include(HAMBURG_2)
+                .build()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,12 +84,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         map.uiSettings.isMapToolbarEnabled = false
 
         // Move the camera to Hamburg, Germany
-        val bounds = LatLngBounds.Builder()
-            .include(HAMBURG_1)
-            .include(HAMBURG_2)
-            .build()
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, width, height, mapPadding))
-
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(hamburgBounds, width, height, mapPadding))
         viewModel.loadData()
     }
 
@@ -117,19 +117,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         if (toggledItem.isSelected) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(toggledItem.vehicle.coordinate, 12f))
+        } else {
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(hamburgBounds, width, height, mapPadding))
         }
     }
 
     private fun addMarkers(pooling: List<VehicleItem>) {
         map.clear()
         pooling.asSequence()
-            .map { item ->
-                MarkerOptions()
-                    .position(item.vehicle.coordinate)
-                    .title(item.vehicle.fleetType)
-                    .icon(markerIconSelected.takeIf { item.isSelected } ?: markerIcon)
-                    .zIndex(0.0f)
-            }
-            .forEach { map.addMarker(it) }
+                .map { item ->
+                    MarkerOptions()
+                            .position(item.vehicle.coordinate)
+                            .title(item.vehicle.fleetType)
+                            .icon(markerIconSelected.takeIf { item.isSelected } ?: markerIcon)
+                            .zIndex(0.0f)
+                }
+                .forEach { map.addMarker(it) }
     }
 }
